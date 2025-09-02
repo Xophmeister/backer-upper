@@ -1,0 +1,14 @@
+# Backup path
+export BACKUP_PATH=/path/to/backup
+
+# SSH connection details
+export REPO_USER=me
+export REPO_HOST=ssh.example.com
+export REPO_PORT=22
+
+# Absolute path to BorgBackup repository
+export REPO_PATH=/path/to/borg/repo
+
+# Borg environment variables
+# NOTE Don't set BORG_REPO or BORG_RSH
+# BORG_PASSPHRASE="hunter2"
