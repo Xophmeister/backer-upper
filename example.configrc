@@ -11,4 +11,4 @@ export REPO_PATH=/path/to/borg/repo
 
 # Borg environment variables
 # NOTE Don't set BORG_REPO or BORG_RSH
-# BORG_PASSPHRASE="hunter2"
+# export BORG_PASSPHRASE="hunter2"
