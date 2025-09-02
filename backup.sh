@@ -34,6 +34,12 @@ export BORG_RSH="ssh -F '${SSH_CONFIG}'"
 # Borg archive ID
 declare ARCHIVE="::{utcnow:%Y-%m-%d}"
 
+# Check we can connect
+if ! ssh -q backer-upper exit; then
+  echo "Cannot connect to backup SSH server"
+  exit 2
+fi
+
 # Create archive
 echo "Starting backup of ${BACKUP_PATH}"
 if ! borg list "${ARCHIVE}" >/dev/null 2>&1; then
