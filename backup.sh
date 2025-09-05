@@ -35,7 +35,7 @@ export BORG_RSH="ssh -F '${SSH_CONFIG}'"
 declare ARCHIVE="::{utcnow:%Y-%m-%d}"
 
 # Check we can connect
-if ! ssh -q backer-upper exit; then
+if ! ssh -qF "${SSH_CONFIG}" backer-upper exit; then
   echo "Cannot connect to backup SSH server"
   exit 2
 fi
