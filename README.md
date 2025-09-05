@@ -35,9 +35,16 @@ systemd.services.backer-upper = {
     User = "<USERNAME>";
     ExecStart = "/path/to/backup.sh";
     TimeoutStartSec = "6h";
+    TimeoutStopSec = "6h";
+    RemainAfterExit = true;
+    KillMode = "mixed";
+    KillSignal = "SIGTERM";
+    SendSIGKILL = false;
+    StandardOutput = "journal";
+    StandardError = "journal";
   };
 
-  path = with pkgs; [ borgbackup openssh ];
+  path = with pkgs; [ bash borgbackup openssh ];
 
   wants = [ "network-online.target" ];
   before = [ "shutdown.target" "network.target" ];
