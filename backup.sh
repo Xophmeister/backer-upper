@@ -2,12 +2,17 @@
 
 set -euo pipefail
 
+# We don't validate that the necessary environment variables are set,
+# because `set -u` will do that for us.
 readonly BASE_DIR="$(dirname "${BASH_SOURCE[0]}")"
 source "${BASE_DIR}/.configrc"
 
 # Make SSH config
 declare SSH_CONFIG="$(mktemp)"
 trap 'rm -f "${SSH_CONFIG}"' EXIT
+
+# Allow different hostnames for the same repository
+export BORG_RELOCATED_REPO_ACCESS_IS_OK=yes
 
 cat > "${SSH_CONFIG}" <<-EOF
 Host backer-upper

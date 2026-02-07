@@ -32,22 +32,40 @@ systemd.services.backer-upper = {
   description = "Backup on shutdown";
   serviceConfig = {
     Type = "oneshot";
-    User = "<USERNAME>";
-    ExecStart = "/path/to/backup.sh";
+    User = "<USER_ID>";
+    ExecStart = "${pkgs.coreutils}/bin/true";
+    ExecStop = backerUpperWrapper;
     TimeoutStartSec = "6h";
     TimeoutStopSec = "6h";
     RemainAfterExit = true;
-    KillMode = "mixed";
+    KillMode = "process";
     KillSignal = "SIGTERM";
     SendSIGKILL = false;
     StandardOutput = "journal";
     StandardError = "journal";
   };
 
-  path = with pkgs; [ bash borgbackup openssh ];
-
+  after = [
+    "network-online.target"
+    "multi-user.target"
+  ];
   wants = [ "network-online.target" ];
-  before = [ "shutdown.target" "network.target" ];
-  wantedBy = [ "shutdown.target" ];
+  wantedBy = [ "multi-user.target" ];
 };
+```
+
+where `backerUpperWrapper` is defined as:
+
+```nix
+backerUpperWrapper = pkgs.writeShellScript "backer-upper-wrapper" ''
+  export PATH=${
+    lib.makeBinPath [
+      pkgs.bash
+      pkgs.borgbackup
+      pkgs.openssh
+    ]
+  }:$PATH
+
+  exec /path/to/backer-upper/backup.sh
+'';
 ```
